@@ -18,9 +18,19 @@ public class Student implements Identifiable{
         return this.id;
     }
 
-/*    public boolean borrowBook(Book book){
+    public String getName(){
+        return this.name;
+    }
+
+    public Set<Book> getBorrowBooks() {
+        return borrowedBooks;
+    }
+
+    public boolean borrowBook(Book book){
         return borrowedBooks.add(book);
     }
+
+    /*
 
     public boolean returnBook(Book book){
         return borrowedBooks.remove(book);
@@ -31,9 +41,7 @@ public class Student implements Identifiable{
     }
 
 
-    public Set<Book> getBorrowBooks() {
-        return borrowedBooks;
-    }
+
 
     public boolean canBorrowBook() {
         return borrowedBooks.size() < 2;

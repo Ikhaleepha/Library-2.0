@@ -9,10 +9,12 @@ import java.util.Optional;
 @Service
 public class BookService {
     private final BookRepository bookRepository;
+    private List<Book> books;
 
 
     public BookService(BookRepository bookRepository){
         this.bookRepository = bookRepository;
+        this.books = bookRepository.getAllEntities();
     }
 
     public List<Book> getAllBooks(){
@@ -21,6 +23,14 @@ public class BookService {
 
     public Optional<Book> getBook(String isbn){
         return bookRepository.exist(isbn);
+    }
+
+    public void emptyLibrary(){
+        bookRepository.getAllEntities().clear();
+    }
+
+    public void populateLibrary(){
+        bookRepository.getAllEntities().addAll(books);
     }
 
 

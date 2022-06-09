@@ -20,6 +20,8 @@ public class LibraryRepository {
 
     private Map<Integer, Borrow> borrowedList = new HashMap<>();
 
+
+
     private Map<String, Integer> bookCatalogue = new HashMap<>(
             Map.of(
             "01231",5,
@@ -35,9 +37,12 @@ public class LibraryRepository {
             )
     );
 
-
     public LibraryRepository(){
 
+    }
+
+    public Map<String, Integer> getBookCatalogue() {
+        return bookCatalogue;
     }
 
     public Map<Integer, Borrow> getBorrowedList() {

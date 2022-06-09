@@ -1,5 +1,6 @@
 package com.mam.io.Library20.service;
 
+import com.mam.io.Library20.entity.Book;
 import com.mam.io.Library20.entity.Student;
 import com.mam.io.Library20.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,10 @@ public class StudentService {
 
     public Optional<Student> getStudent(String studentId){
         return studentRepository.exist(studentId);
+    }
+
+    public void borrowBook(String studentId, Book book){
+        getStudent(studentId).get().borrowBook(book);
     }
 /*
     public boolean exists(String studentid){

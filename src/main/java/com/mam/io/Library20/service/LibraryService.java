@@ -30,27 +30,32 @@ public class LibraryService {
         this.studentService = studentService;
     }
 
+    public Optional<Student> getStudent(String studentId){
+        return studentService.getStudent(studentId);
+    }
+
     public List<Book> getAllBooks(){
         return bookService.getAllBooks();
     }
 
-    public Book getBook(String isbn){
-
-        Optional<Book> book = bookService.getBook(isbn);
-
-        if(!book.isPresent())
-            throw new BookNotFoundException();
-
-        return book.get();
+    public Optional<Book> getBook(String isbn){
+        return bookService.getBook(isbn);
     }
 
+    public boolean isBookAvailable(String bookIsbn){
+        return libraryRepository.getBookCatalogue()
+                .get(bookIsbn) > 0;
+    }
 
+    public boolean bookExists(String bookIsbn){
+        return (
+                getBook(bookIsbn).isPresent() &&
+                libraryRepository.getBookCatalogue().containsKey(bookIsbn)
+                );
 
-    public String borrowBook(Borrow borrow){
-        if(libraryRepository.getBorrowedList().containsKey(borrow.hashCode())){
-            throw new RuntimeException("Student has already borrowed the book");
-        }
+    }
 
+    public int getNumberOfBooksBorrowed(Borrow borrow){
         Collection<Borrow> borrows = libraryRepository.getBorrowedList().values();
 
         int count = 0;
@@ -61,28 +66,43 @@ public class LibraryService {
                 count = count + 1;
         }
 
-        if(count >= 2)
+        return count;
+    }
+
+    public String borrowBook(Borrow borrow){
+
+        if(!studentService.getStudent(borrow.getStudentId()).isPresent()) {
+            throw new StudentNotFoundException();
+        }
+
+        if(!bookExists(borrow.getBookIsbn())){
+            throw new RuntimeException("Book Does Not Exist in the library");
+        }
+
+
+        if(libraryRepository.getBorrowedList().containsKey(borrow.hashCode())){
+            throw new RuntimeException("Student has already borrowed the book");
+        }
+
+
+        if(getNumberOfBooksBorrowed(borrow) >= 2)
             throw new RuntimeException("Student has reached a limit of two books");
 
+
         libraryRepository.borrowBook(borrow);
+        studentService.borrowBook(borrow.getStudentId(),bookService.getBook(borrow.getBookIsbn()).get());
 
         return "borrowed successfully";
 
     }
 
-    /*
-    public void emptyLibrary(){
+    public void emptyLibrary() {
         bookService.emptyLibrary();
     }
 
-    public void populateLibrary(){
+    public void populateLibrary() {
         bookService.populateLibrary();
     }
 
-    public void borrowBook(String studentId, String bookIsbn){
-        //if book is available and student do not have a copy of the book and can borrow book
-        //add the
-        //update the number of book copies in the library
 
-    }*/
 }
