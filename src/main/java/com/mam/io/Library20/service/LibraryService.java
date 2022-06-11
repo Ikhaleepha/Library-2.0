@@ -79,11 +79,18 @@ public class LibraryService {
             throw new RuntimeException("Book Does Not Exist in the library");
         }
 
+        if(!isBookAvailable(borrow.getBookIsbn())){
+            throw new RuntimeException("Book is not available");
+        }
 
-        if(libraryRepository.getBorrowedList().containsKey(borrow.hashCode())){
+        if(hasBorrowedBook(borrow)){
             throw new RuntimeException("Student has already borrowed the book");
         }
 
+        /*if(libraryRepository.getBorrowedList().containsKey(borrow.hashCode())){
+            throw new RuntimeException("Student has already borrowed the book");
+        }
+*/
 
         if(getNumberOfBooksBorrowed(borrow) >= 2)
             throw new RuntimeException("Student has reached a limit of two books");
@@ -104,5 +111,20 @@ public class LibraryService {
         bookService.populateLibrary();
     }
 
+    public void setNumberOfCopies(String bookIsbn, int numberOfCopies){
+        libraryRepository.setNumberOfBookCopies(bookIsbn,numberOfCopies);
+    }
 
+    public int getNumberOfCopies(String bookIsbn){
+        return libraryRepository.getNumberOfBookCopies(bookIsbn);
+    }
+
+    public boolean hasBorrowedBook(Borrow borrow){
+        return libraryRepository.getBorrowedList().containsKey(borrow.hashCode());
+    }
+
+    public void reInitializeLibrary() {
+        libraryRepository.reInitializeLibrary();
+        studentService.reInitializeLibrary();
+    }
 }

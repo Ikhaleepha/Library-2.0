@@ -55,7 +55,7 @@ public class ViewBooksStepsDefinition {
 
     @Then("^i see the list of the books in the library$")
     public void iSeetheListOfTheBooksInTheLibrary(){
-        System.out.println("The size is " + actualBooks.size());
-        //assertTrue(0 != actualBooks.size());
+        //System.out.println("The size is " + actualBooks.size());
+        assertTrue(0 != actualBooks.size());
     }
 }

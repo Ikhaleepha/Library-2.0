@@ -9,8 +9,8 @@ public class Borrow {
         this.bookIsbn = bookIsbn;
     }
 
-    private final String studentId;
-    private final String bookIsbn;
+    private String studentId;
+    private String bookIsbn;
 
     public String getStudentId() {
         return studentId;
@@ -31,5 +31,13 @@ public class Borrow {
     @Override
     public int hashCode() {
         return Objects.hash(studentId, bookIsbn);
+    }
+
+    public void setStudentId(String studentId) {
+        this.studentId = studentId;
+    }
+
+    public void setBookIsbn(String bookIsbn) {
+        this.bookIsbn = bookIsbn;
     }
 }

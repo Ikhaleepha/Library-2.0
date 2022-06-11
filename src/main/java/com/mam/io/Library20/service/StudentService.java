@@ -6,6 +6,7 @@ import com.mam.io.Library20.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -25,19 +26,15 @@ public class StudentService {
     public void borrowBook(String studentId, Book book){
         getStudent(studentId).get().borrowBook(book);
     }
-/*
-    public boolean exists(String studentid){
-        return studentRepository.exists(studentid);
-    }
-    public void borrowBook(String studentId, Book book){
-        getStudent(studentId).borrowBook(book);
+
+    public void reInitializeLibrary() {
+        for(int i = 0; i < getAllStudents().size(); i++){
+            getAllStudents().get(i)
+                    .getBorrowBooks().clear();
+        }
     }
 
-    public boolean canBorrowBook(String studentId){
-        return getStudent(studentId).canBorrowBook();
+    private List<Student> getAllStudents() {
+        return studentRepository.getAllEntities();
     }
-
-    public boolean successfullyBorrowed(Book book){
-        return false;
-    }*/
 }

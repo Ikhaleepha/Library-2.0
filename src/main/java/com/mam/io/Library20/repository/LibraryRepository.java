@@ -4,6 +4,7 @@ import com.mam.io.Library20.entity.Borrow;
 import com.mam.io.Library20.entity.Student;
 import com.mam.io.Library20.service.LibraryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.InitDestroyAnnotationBeanPostProcessor;
 import org.springframework.stereotype.Component;
 
 import java.util.Dictionary;
@@ -13,6 +14,7 @@ import java.util.Map;
 @Component
 public class LibraryRepository {
 
+    private final Map<String, Integer> initialCatalogueState;
 
     BookRepository bookRepository;
 
@@ -24,7 +26,7 @@ public class LibraryRepository {
 
     private Map<String, Integer> bookCatalogue = new HashMap<>(
             Map.of(
-            "01231",5,
+            "01231",3,
             "01232",4,
             "01233",3,
             "01234",2,
@@ -38,7 +40,7 @@ public class LibraryRepository {
     );
 
     public LibraryRepository(){
-
+        initialCatalogueState = bookCatalogue;
     }
 
     public Map<String, Integer> getBookCatalogue() {
@@ -51,5 +53,20 @@ public class LibraryRepository {
 
     public void borrowBook(Borrow borrow) {
         borrowedList.put(borrow.hashCode(), borrow);
+        int numberOfCopies = bookCatalogue.get(borrow.getBookIsbn());
+        setNumberOfBookCopies(borrow.getBookIsbn(),numberOfCopies - 1 );
+    }
+
+    public void setNumberOfBookCopies(String bookIsbn, int numberOfCopies){
+        bookCatalogue.put(bookIsbn, numberOfCopies);
+    }
+
+    public int getNumberOfBookCopies(String bookIsbn){
+        return bookCatalogue.get(bookIsbn);
+    }
+
+    public void reInitializeLibrary(){
+        this.bookCatalogue = this.initialCatalogueState;
+        this.borrowedList.clear();
     }
 }
