@@ -2,7 +2,7 @@ package com.mam.io.Library20.controller;
 
 import com.mam.io.Library20.entity.Book;
 import com.mam.io.Library20.entity.Borrow;
-import com.mam.io.Library20.entity.LibraryEntity;
+import com.mam.io.Library20.entity.ReturnBook;
 import com.mam.io.Library20.entity.Student;
 import com.mam.io.Library20.error.BookNotFoundException;
 import com.mam.io.Library20.error.StudentNotFoundException;
@@ -11,7 +11,6 @@ import com.mam.io.Library20.service.LibraryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,11 +62,8 @@ public class LibraryController {
         return optionalStudent.get();
     }
 
-
-    /*
-
-    @PutMapping(path = "/books/return/{isbn}")
-    public String returnBook(@PathVariable String isbn){
-        return bookService.returnBook(isbn);
-    }*/
+    @PostMapping(path="/returnBook")
+    public String borrowBook(@RequestBody ReturnBook returnBook){
+        return libraryService.returnBook(returnBook);
+    }
 }

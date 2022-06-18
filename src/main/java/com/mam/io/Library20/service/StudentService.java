@@ -1,6 +1,7 @@
 package com.mam.io.Library20.service;
 
 import com.mam.io.Library20.entity.Book;
+import com.mam.io.Library20.entity.ReturnBook;
 import com.mam.io.Library20.entity.Student;
 import com.mam.io.Library20.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +28,16 @@ public class StudentService {
         getStudent(studentId).get().borrowBook(book);
     }
 
+    public void returnBook(ReturnBook returnBook) {
+        getStudent(returnBook.getStudentId()).get().returnBook(returnBook.getBookIsbn());
+    }
+
     public void reInitializeLibrary() {
         for(int i = 0; i < getAllStudents().size(); i++){
-            getAllStudents().get(i)
-                    .getBorrowBooks().clear();
+            getAllStudents()
+                    .get(i)
+                    .getBorrowedBooks()
+                    .clear();
         }
     }
 

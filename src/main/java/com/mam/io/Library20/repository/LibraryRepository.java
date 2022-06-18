@@ -1,6 +1,7 @@
 package com.mam.io.Library20.repository;
 
 import com.mam.io.Library20.entity.Borrow;
+import com.mam.io.Library20.entity.ReturnBook;
 import com.mam.io.Library20.entity.Student;
 import com.mam.io.Library20.service.LibraryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +56,12 @@ public class LibraryRepository {
         borrowedList.put(borrow.hashCode(), borrow);
         int numberOfCopies = bookCatalogue.get(borrow.getBookIsbn());
         setNumberOfBookCopies(borrow.getBookIsbn(),numberOfCopies - 1 );
+    }
+
+    public void returnBook(ReturnBook returnBook) {
+        borrowedList.remove(returnBook.hashCode());
+        int numberOfCopies = bookCatalogue.get(returnBook.getBookIsbn());
+        setNumberOfBookCopies(returnBook.getBookIsbn(),numberOfCopies + 1 );
     }
 
     public void setNumberOfBookCopies(String bookIsbn, int numberOfCopies){
