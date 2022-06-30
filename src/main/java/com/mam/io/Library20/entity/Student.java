@@ -22,7 +22,7 @@ public class Student implements Identifiable{
         return this.name;
     }
 
-    public Set<Book> getBorrowBooks() {
+    public Set<Book> getBorrowedBooks() {
         return borrowedBooks;
     }
 
@@ -30,21 +30,25 @@ public class Student implements Identifiable{
         return borrowedBooks.add(book);
     }
 
-    /*
+    public boolean returnBook(String bookIsbn){
+        Book book = null;
 
-    public boolean returnBook(Book book){
+        for(Book b: borrowedBooks){
+            if(b.getId().equalsIgnoreCase(bookIsbn)){
+                book = b;
+            }
+        }
+
         return borrowedBooks.remove(book);
     }
 
-    public boolean hasBorrowedBook(Book book){
-        return borrowedBooks.contains(book);
+    public boolean hasBorrowedBook(String bookIsbn){
+        for(Book b: borrowedBooks){
+            if(b.getId() == bookIsbn)
+                return true;
+        }
+
+        return false;
     }
-
-
-
-
-    public boolean canBorrowBook() {
-        return borrowedBooks.size() < 2;
-    }*/
 
 }

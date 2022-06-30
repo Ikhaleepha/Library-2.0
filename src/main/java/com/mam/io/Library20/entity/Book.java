@@ -1,6 +1,6 @@
 package com.mam.io.Library20.entity;
 
-public abstract class Book implements Identifiable{
+public class Book implements Identifiable{
 
     private String isbn;
     private String title;

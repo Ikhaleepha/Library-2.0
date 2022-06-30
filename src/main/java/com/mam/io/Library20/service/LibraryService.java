@@ -2,12 +2,11 @@ package com.mam.io.Library20.service;
 
 import com.mam.io.Library20.entity.Book;
 import com.mam.io.Library20.entity.Borrow;
-import com.mam.io.Library20.entity.LibraryEntity;
+import com.mam.io.Library20.entity.ReturnBook;
 import com.mam.io.Library20.entity.Student;
 import com.mam.io.Library20.error.BookNotFoundException;
 import com.mam.io.Library20.error.StudentNotFoundException;
 import com.mam.io.Library20.repository.LibraryRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -87,11 +86,6 @@ public class LibraryService {
             throw new RuntimeException("Student has already borrowed the book");
         }
 
-        /*if(libraryRepository.getBorrowedList().containsKey(borrow.hashCode())){
-            throw new RuntimeException("Student has already borrowed the book");
-        }
-*/
-
         if(getNumberOfBooksBorrowed(borrow) >= 2)
             throw new RuntimeException("Student has reached a limit of two books");
 
@@ -101,6 +95,12 @@ public class LibraryService {
 
         return "borrowed successfully";
 
+    }
+
+    public String returnBook(ReturnBook returnBook) {
+        libraryRepository.returnBook(returnBook);
+        studentService.returnBook(returnBook);
+        return "Returned Successfully";
     }
 
     public void emptyLibrary() {

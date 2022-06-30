@@ -8,16 +8,22 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.web.client.TestRestTemplate;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BorrowBookStepsDefinition {
 
+    @Autowired
+    TestRestTemplate testRestTemplate;
     private final LibraryService libraryService;
     private String studentId;
     private String bookIsbn;
     private Borrow borrow;
+
+    private String borrowUrl = "http://localhost:8080/borrow";
 
     public BorrowBookStepsDefinition(LibraryService libraryService) {
         this.libraryService = libraryService;
@@ -26,12 +32,10 @@ public class BorrowBookStepsDefinition {
         borrow = new Borrow(studentId, bookIsbn);
     }
 
-    /*@Before
-    public void initializeBookAndStudent(){
-        studentId = "01";
-        bookIsbn = "01231";
-        borrow = new Borrow(studentId, bookIsbn);
-    }*/
+    @Before
+    public void clearValues(){
+        libraryService.reInitializeLibrary();
+    }
 
     @Given("there are more than one copy of a book in the library")
     public void thereAreMoreThanOneCopyAfABookInTheLibrary() {
@@ -42,13 +46,8 @@ public class BorrowBookStepsDefinition {
 
     @When("i choose a book to add to my borrowed list")
     public void iChooseABookToAddToMyBorrowedList() {
-
-        System.out.println("Student ISBN " + borrow.getStudentId());
-        System.out.println("Book ISBN " + borrow.getBookIsbn());
-
-        System.out.println(studentId);
-        System.out.println(bookIsbn);
-        libraryService.borrowBook(new Borrow(studentId, bookIsbn));
+        //libraryService.borrowBook(new Borrow(studentId, bookIsbn));
+        String result1 = testRestTemplate.postForObject(borrowUrl ,borrow, String.class);
     }
 
     @Then("one copy of the book is added to my borrowed list")
@@ -63,18 +62,9 @@ public class BorrowBookStepsDefinition {
 
     @Given("there is only one copy of a book in the library")
     public void thereIsOnlyOneCopyOfABookInTheLibrary() {
-        // Write code here that turns the phrase above into concrete actions
         libraryService.setNumberOfCopies(bookIsbn, 1);
     }
 
-    @When("^i choose a book with one copy to add to my borrowed list$")
-    public void iChooseABookWithOneCopyToAddToMyBorrowedList(){
-        studentId = "02";
-        bookIsbn = "01231";
-
-        libraryService.setNumberOfCopies(bookIsbn,1);
-        libraryService.borrowBook(new Borrow(studentId, bookIsbn));
-    }
 
     @Then("the book is removed from the library")
     public void theBookIsRemovedFromTheLibrary() {
